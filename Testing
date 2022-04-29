@@ -1,4 +1,101 @@
-Shit
-hhhhhhhhh
-hallo
-Piss
+import random
+import turtle
+import time
+
+
+#Spillbrett
+spillbrett = turtle.Screen()
+spillbrett.title("Det berømte slangespillet laget av Jonas")
+spillbrett.bgcolor("lime green")
+spillbrett.setup(width=800, height=800)
+
+#player
+hode = turtle.Turtle()
+hode.speed(0)
+hode.shape("turtle")
+hode.color("Black")
+hode.penup()
+hode.goto(0,0)
+
+# Sette opp slangemat
+mat = turtle.Turtle()
+mat.speed(0)
+mat.shape("circle")
+mat.color("red")
+mat.penup()
+mat.goto(0,100)
+
+
+hode.direction = "stop"
+
+#knytte bevegelse til tastetrykk
+def go_up():
+    hode.direction = "up"
+def go_down():
+    hode.direction = "down"
+def go_left():
+    hode.direction = "left"
+def go_right():
+    hode.direction = "right"
+
+#Bevegelse
+def move():
+    if hode.direction == "up":
+        y = hode.ycor()
+        hode.sety(y+20)
+    if hode.direction == "down":
+        y = hode.ycor()
+        hode.sety(y-20)
+    if hode.direction == "left":
+        x = hode.xcor()
+        hode.setx(x-20)
+    if hode.direction == "right":
+        x = hode.xcor()
+        hode.setx(x+20)
+
+#Hvilke vei spiller går når du trykker på knap
+spillbrett.listen()
+spillbrett.onkeypress(go_up, "w")
+spillbrett.onkeypress(go_down, "s")
+spillbrett.onkeypress(go_left, "a")
+spillbrett.onkeypress(go_right, "d")
+segments = []
+
+while True:
+    x = hode.xcor()
+    y = hode.ycor()
+
+    if x < -390 or x > 390 or y < -390 or y >390:
+        #slange dør da den kjøre i vegg
+        time.sleep(1)
+        hode.goto(0,0)
+        hode.direction = "stop"
+        for segment in segments:
+            segment.goto(1000,1000)
+        segments.clear()
+
+    spillbrett.update()
+    if hode.distance(mat) <20:
+        #flytter maten rundt
+        x = random.randint(-390,390)
+        y = random.randint(-390,390)
+        mat.goto(x,y)
+        #spise maten blir lengre
+        new_segment = turtle.Turtle()
+        new_segment.speed(0)
+        new_segment.shape("turtle")
+        new_segment.color("Black")
+        new_segment.penup()
+        segments.append(new_segment)
+
+    for index in range(len(segments)-1,0,-1):
+
+        x = segments[index-1].xcor()
+        y = segments[index-1].ycor()
+        segments[index].goto(x, y)
+    if len(segments) > 1:
+        x = hode.xcor()
+        y = hode.ycor()
+        segments[0].goto(x,y)
+    time.sleep(0.01)
+    move()
