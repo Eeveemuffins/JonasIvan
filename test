@@ -1,0 +1,9 @@
+Timelønn = 195
+uke = float(input("hvor mange timer har du jobbet?"))
+overtid = 35
+Ukelønn = Timelønn * uke
+
+if uke <= 37.5:
+    print(f"du får {Ukelønn} i lønn")
+elif uke > 37.5:
+    print(f"Du har jobbet overtid, du får {Ukelønn + 195 * 1.35}")
